@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { StyleSheet, Alert, View } from 'react-native';
 import Formulario from './Components/Formulario';
+import Clima from "./Components/Clima";
 
 
 export default function App() {
@@ -12,8 +13,10 @@ export default function App() {
 
   //Cuando inicie la app no consulte nada -- false--
   const [consultar, guardarConsultar] = useState(false)
-  const [res, guardarResultado] = useState({})
+
+  const [resultado, guardarResultado] = useState({})
   const {ciudad, pais} = busqueda;
+  const [bgcolor, guardarBgColor] = useState('#3E5F8A')
 
   useEffect(() => {
     const consultarClima = async () => {
@@ -26,6 +29,20 @@ export default function App() {
           const resultado = await respuesta.json();
           guardarResultado(resultado);
           guardarConsultar(false);
+
+          //Modifica los colores de fondo segun la temperatura
+          
+          const kelvin= 273.15;
+          const {main} = resultado;
+          const actual = main.temp - kelvin;
+
+          if(actual<10){
+            guardarBgColor('rgb(105, 108,149)');
+          } else if (actual >=  10 && actual <25){
+            guardarBgColor('rgb(71, 149,212)');
+          } else {
+            guardarBgColor('rgb(178, 28, 61)');
+          }
   
         } catch (error) {
           mostrarALerta();      
@@ -43,9 +60,15 @@ export default function App() {
     )
   }  
 
+  const bgColorApp = {
+    backgroundColor: bgcolor
+  }
+
   return (
-    <View style={styles.app}>
+    <View style={[styles.app, bgColorApp]}>
       <View style={styles.contenido}> 
+         <Clima
+         resultado = {resultado} />
          <Formulario 
           busqueda = {busqueda}
           guardarBusqueda = {guardarBusqueda}
@@ -59,12 +82,11 @@ export default function App() {
 const styles = StyleSheet.create({
   app: {
     flex: 1,
-    backgroundColor: '#3E5F8A',
-    justifyContent: 'center'
+    justifyContent: 'center'    
   },
 
   contenido: {
-    marginHorizontal: '5%'
+    marginHorizontal: '2.5%'
   }
   
 });
