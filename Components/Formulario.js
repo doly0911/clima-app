@@ -1,21 +1,45 @@
 import react from "react";
-import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Picker } from "@react-native-picker/picker";
 
-export default function Formulario() {
-    return (
+export default function Formulario({busqueda, guardarBusqueda, guardarConsulta}) {
+  
+  const {pais, ciudad} = busqueda;
+
+  const consultarClima = () =>{
+     if (pais.trim() === '' || ciudad.trim() === '') {
+       mostrarALerta();       
+       return;
+     }
+  }
+
+  const mostrarALerta = () => {
+    Alert.alert(
+      'Error',
+      'Agrega una ciudad y país para la búsqueda',
+      [{ text: 'Entendido'}]
+    )
+  }  
+  
+  return (
       
       <View style={styles.formulario}>
 
         <View>
           <TextInput
+          value={ciudad}
           style={styles.input}
+          onChangeText={ ciudad => guardarBusqueda({...busqueda, ciudad}) }
           placeholder="Ciudad"
           placeholderTextColor="#666"/>
         </View>
 
         <View>
-          <Picker style={styles.picker}>
+          <Picker 
+            style={styles.picker}
+            selectedValue = {pais}
+            onValueChange={ pais => guardarBusqueda({...busqueda, pais})}
+            >
             <Picker.Item label="---Seleccione un país---" value=""/>
             <Picker.Item label="Estados Unidos" value="US"/>
             <Picker.Item label="México" value="MX"/>
