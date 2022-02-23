@@ -2,7 +2,7 @@ import react from "react";
 import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Picker } from "@react-native-picker/picker";
 
-export default function Formulario({busqueda, guardarBusqueda, guardarConsulta}) {
+export default function Formulario({busqueda, guardarBusqueda, guardarConsultar}) {
   
   const {pais, ciudad} = busqueda;
 
@@ -11,12 +11,15 @@ export default function Formulario({busqueda, guardarBusqueda, guardarConsulta})
        mostrarALerta();       
        return;
      }
+
+     //consultar la api
+     guardarConsultar(true)
   }
 
   const mostrarALerta = () => {
     Alert.alert(
       'Error',
-      'Agrega una ciudad y país para la búsqueda',
+      'Agrega una ciudad y un país para la búsqueda',
       [{ text: 'Entendido'}]
     )
   }  
@@ -49,7 +52,9 @@ export default function Formulario({busqueda, guardarBusqueda, guardarConsulta})
           </Picker>
         </View>
         
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+        onPress={ () => consultarClima()}
+        >
           <View style={styles.btnBuscar}>
             <Text style={styles.txtBuscar}>
               Buscar Clima
