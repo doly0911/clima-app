@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { StyleSheet, Alert, View } from 'react-native';
+import { StyleSheet, Alert, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Formulario from './Components/Formulario';
 import Clima from "./Components/Clima";
 
@@ -60,22 +60,29 @@ export default function App() {
     )
   }  
 
+  const ocultarTeclado = () => {
+    //Cierra el teclado si toca cualquier parte de la pantalla
+    Keyboard.dismiss();    
+  }
+
   const bgColorApp = {
     backgroundColor: bgcolor
   }
 
   return (
-    <View style={[styles.app, bgColorApp]}>
-      <View style={styles.contenido}> 
-         <Clima
-         resultado = {resultado} />
-         <Formulario 
-          busqueda = {busqueda}
-          guardarBusqueda = {guardarBusqueda}
-          guardarConsultar = {guardarConsultar}
-         />
-      </View>     
-    </View>
+    <TouchableWithoutFeedback onPress={() => ocultarTeclado()}>
+      <View style={[styles.app, bgColorApp]}>
+        <View style={styles.contenido}> 
+          <Clima
+          resultado = {resultado} />
+          <Formulario 
+            busqueda = {busqueda}
+            guardarBusqueda = {guardarBusqueda}
+            guardarConsultar = {guardarConsultar}
+          />
+        </View>     
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
